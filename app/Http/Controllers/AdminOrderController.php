@@ -49,9 +49,14 @@ class AdminOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $id)
     {
-        //
+        $order = Order::with('orderDetails.product')->find($id);
+        // return $order;
+        return view('admin.order.show', [
+            'title' => 'Detail Order',
+            'order' => $order
+        ]);
     }
 
     /**

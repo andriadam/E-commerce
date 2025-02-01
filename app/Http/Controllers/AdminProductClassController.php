@@ -17,7 +17,7 @@ class AdminProductClassController extends Controller
         $product_classes = ProductClass::with('Product')->latest()->get();
         // return $product_classes;
         return view('admin.product_class.index', [
-            'title' => 'Produk',
+            'title' => 'Kelas Produk',
             'product_classes' => $product_classes
         ]);
     }
@@ -30,7 +30,7 @@ class AdminProductClassController extends Controller
     public function create()
     {
         return view('admin.product_class.create', [
-            'title' => 'Produk',
+            'title' => 'Kelas Produk',
         ]);
     }
 
@@ -85,7 +85,7 @@ class AdminProductClassController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
+    {
         // Cek data request
         $validatedData = $request->validate([
             'class_name' => 'required|max:40'

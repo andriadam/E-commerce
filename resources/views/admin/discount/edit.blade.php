@@ -1,53 +1,77 @@
 @extends('layouts.admin.app')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-8 offset-2">
-                <div class="card mt-3">
-                    <div class="card-header">
-                       Update discount: {{ $discount->name }}
-                    </div>
-                    <div class="card-body">
-                      <form action="{{ route('admin.discount.update', $discount->id) }}" method="post">
-                      @csrf
-                      @method('PUT')
-                      <input type="hidden" name="id" value="{{ $discount->id }}">
-                        <div class="form-group mb-4">
-                          <label for="name" class="form-label">Name</label>
-                          <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : ''}}" name="name" value="{{ old('name', $discount->name) }}" required>
-                          @if ($errors->has('name'))
-                            <p class="text-danger">{{ $errors->first('name') }}</p>
-                          @endif
-                        </div>
-                        <div class="form-group mb-4">
-                          <label for="code" class="form-label">code</label>
-                          <input type="text" class="form-control {{ $errors->has('code') ? 'is-invalid' : ''}}" name="code" value="{{ old('code', $discount->code) }}" required>
-                          @if ($errors->has('code'))
-                            <p class="text-danger">{{ $errors->first('code') }}</p>
-                          @endif
-                        </div>
-                        <div class="form-group mb-4">
-                          <label for="description" class="form-label">Description</label>
-                          <textarea name="description" class="form-control {{ $errors->has('description') ? 'is-invalid' : ''}}" cols="0" rows="2"required>{{ old('name', $discount->description) }}</textarea>
-                          @if ($errors->has('description'))
-                            <p class="text-danger">{{ $errors->first('description') }}</p>
-                          @endif
-                        </div>
-                        <div class="form-group mb-4">
-                          <label for="percentage" class="form-label">Discount percentage</label>
-                          <input type="number" class="form-control {{ $errors->has('percentage') ? 'is-invalid' : ''}}" name="percentage" min="1" max="100" value="{{ old('percentage', $discount->percentage) }}" required>
-                          @if ($errors->has('percentage'))
-                            <p class="text-danger">{{ $errors->first('percentage') }}</p>
-                          @endif
-                        </div>
-                        <div class="form-group mb-4">
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                      </form>
-                    </div>
-                </div>
-            </div>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+          <h4 class="mb-0">Edit Diskon: {{ $discount->name }}</h4>
         </div>
+        <div class="card-body">
+          <form action="{{ route('admin.discount.update', $discount->id) }}" method="post">
+            @method('PUT')
+            @csrf
+            
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">Nama Diskon</label>
+              <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $discount->name) }}" required>
+              @error('name')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+
+            <div class="mb-3">
+              <label for="code" class="form-label fw-semibold">Kode</label>
+              <input type="text" name="code" class="form-control @error('code') is-invalid @enderror" value="{{ old('code', $discount->code) }}" required>
+              @error('code')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label fw-semibold">Deskripsi</label>
+              <textarea name="description" class="form-control @error('description') is-invalid @enderror" required>{{ old('description', $discount->description) }}</textarea>
+              @error('description')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+
+            <div class="mb-3">
+              <label for="percentage" class="form-label fw-semibold">Persentase Diskon</label>
+              <input type="number" name="percentage" class="form-control @error('percentage') is-invalid @enderror" min="1" max="100" value="{{ old('percentage', $discount->percentage) }}" required>
+              @error('percentage')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+
+            <div class="mb-3">
+              <label for="max_disc" class="form-label fw-semibold">Maksimal Diskon (Rupiah)</label>
+              <input type="number" name="max_disc" class="form-control @error('max_disc') is-invalid @enderror" value="{{ old('max_disc', $discount->max_disc) }}" required>
+              @error('max_disc')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-success fw-bold">
+                <i class="bi bi-pencil"></i> Update Data
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 @endsection

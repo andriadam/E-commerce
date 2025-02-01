@@ -84,12 +84,20 @@ class AdminDiscountController extends Controller
      * @param  \App\Models\Discount  $discount
      * @return \Illuminate\Http\Response
      */
-    public function update(Update $request, Discount $discount)
+    public function update(Request $request, Discount $discount)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|max:40',
+            'code' => 'required',
+            'description' => 'required|max:64',
+            'percentage' => 'required|numeric',
+            'max_disc' => 'required|numeric',
+        ]);
+
         // Update di database
-        $discount->update($request->all());
-        $request->session()->flash('success', "Discount {$discount->name} has been updated");
-        return redirect(route('admin.discount.index'));
+        $discount->update($validatedData);
+
+        return redirect(route('admin.discount.index'))->with('success', "Discount has been updated");
     }
 
     /**
@@ -102,7 +110,7 @@ class AdminDiscountController extends Controller
     {
         // Delete di database
         $discount->delete();
-        $request->session()->flash('error', "Discount {$discount->name} has been deleted");
-        return redirect(route('admin.discount.index'));
+
+        return redirect(route('admin.discount.index'))->with('success', 'Discount has been deleted!');
     }
 }

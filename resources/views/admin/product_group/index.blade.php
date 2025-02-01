@@ -1,55 +1,68 @@
 @extends('layouts.admin.app')
 
 @section('content')
-<div class="row mt-4 text-center">
-  <h2>Daftar {{ $title }}</h2>
-</div>
-<div class="row">
-  <div class="col-sm-12">
-    @include('components.alert')
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">Daftar {{ $title }}</h2>
   </div>
-  <div class="col-sm-12">
-    <a href="{{ route('admin.productGroup.create') }}" class="btn btn-sm btn-primary"><i class="bi bi-plus-square"></i>
-      Tambah
-      {{ $title }}</a>
+
+  <div class="row mb-3">
+    <div class="col-sm-12">
+      @include('components.alert')
+    </div>
+    <div class="col-sm-12 text-end">
+      <a href="{{ route('admin.productGroup.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Tambah {{ $title }}
+      </a>
+    </div>
   </div>
-</div>
-<div class="row mt-2">
-  <table class="table" id="table1">
-    <thead>
-      <tr>
-        <th>No. </th>
-        <th>Nama Grup</th>
-        <th>Produk</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse ($product_groups as $row)
-      <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $row->group_name }}</td>
-        <td>
-          @foreach ($row->product as $row)
-              {{ $row->product_name }}
-          @endforeach
-        </td>
-        <td>
-          <a href="{{ route('admin.productGroup.edit', $row->id) }}" class="btn btn-success">Edit</a>
-          <form action="{{ route('admin.productGroup.destroy', $row->id) }}" method="post" class="d-inline">
-            @method('delete')
-            @csrf
-            <button class="btn btn-danger border-0" onclick="return confirm('Are you sure?')">
-              Hapus</button>
-          </form>
-        </td>
-      </tr>
-      @empty
-      <tr class="text-center">
-        <td colspan="6">No {{ $title }} found.</td>
-      </tr>
-      @endforelse
-    </tbody>
-  </table>
+
+  <div class="card shadow-sm p-3">
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center" id="table1">
+        <thead class="table-primary">
+          <tr>
+            <th>No</th>
+            <th>Nama Grup</th>
+            <th>Produk</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse ($product_groups as $group)
+          <tr class="table-light">
+            <td>{{ $loop->iteration }}</td>
+            <td class="text-start fw-semibold">{{ $group->group_name }}</td>
+            <td class="text-start">
+              @forelse ($group->product as $product)
+                <span class="badge bg-secondary">{{ $product->product_name }}</span>
+              @empty
+                <span class="text-muted">Tidak ada produk</span>
+              @endforelse
+            </td>
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="{{ route('admin.productGroup.edit', $group->id) }}" class="btn btn-sm btn-success">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </a>
+                <form action="{{ route('admin.productGroup.destroy', $group->id) }}" method="post" class="d-inline">
+                  @method('delete')
+                  @csrf
+                  <button class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus grup ini?')">
+                    <i class="bi bi-trash"></i> Hapus
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="4" class="text-center text-muted">Tidak ada {{ $title }} ditemukan.</td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 @endsection
